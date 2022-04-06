@@ -1,28 +1,26 @@
-// Libs padrão
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include <sys/stat.h>
-// #include <sys/types.h>
-// #include <unistd.h>  fork e execve
-// #include <sys/wait.h> wait
+#include <sys/types.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
-enum { LIBERA, PROTEGE, RODE, RODEVEJA, COMANDO_INVALIDO };
+int traduz_comando(char comando[]);
+void executa_comando(int comando, char argumento[]);
+void executa_chmod(char permissao_str[4], char arquivo[]);
+void executa_main_thread(char executavel[]);
 
-int traduz_comando(const char comando[]);
-void executa_comando(int comando, const char argumento[]);
-void executa_chmod(const char permissao_str[4], const char arquivo[]);
-
-int main() {
+int main(int argc, char **argv) {
   char input_cmd[64], input_arg[64];
+  int cmd;
 
-  while (true) {
+  while (1) {
     printf("$ ");
     scanf("%s", input_cmd);
     scanf("%s", input_arg);
-    const int cmd = traduz_comando(input_cmd);
+    cmd = traduz_comando(input_cmd);
     executa_comando(cmd, input_arg);
   }
 
@@ -34,29 +32,32 @@ int main() {
  * não seja referente a nenhum dos comandos conhecidos pelo programa, o
  * identificador obtido será `COMANDO_INVALIDO`.
  */
-int traduz_comando(const char comando[]) {
+int traduz_comando(char comando[]) {
   if (strcmp(comando, "protegepracaramba") == 0)
-    return PROTEGE;
+    return 1;
   else if (strcmp(comando, "liberageral") == 0)
-    return LIBERA;
-  else if (strcmp(comando, "rode") == 0)
-    return RODE;
+    return 2;
   else if (strcmp(comando, "rodeveja") == 0)
-    return RODEVEJA;
+    return 3;
+  else if (strcmp(comando, "rode") == 0)
+    return 4;
   else
-    return COMANDO_INVALIDO;
+    return 5;
 }
 
 /**
  * Executa `comando` usando como argumento a string armazenada em `argumento`.
  */
-void executa_comando(int comando, const char argumento[]) {
+void executa_comando(int comando, char argumento[]) {
   switch (comando) {
-  case PROTEGE:
+  case 1:
     executa_chmod("000", argumento);
     break;
-  case LIBERA:
+  case 2:
     executa_chmod("777", argumento);
+    break;
+  case 3:
+    executa_main_thread(argumento);
     break;
   default:
     printf("ERRO: COMANDO NÃO IMPLEMENTADO AINDA!!!\n");
@@ -68,7 +69,20 @@ void executa_comando(int comando, const char argumento[]) {
  * Altera as permissões de `arquivo` baseado em uma string de permissões no
  * padrão do comando *chmod* (p. exe. "755").
  */
-void executa_chmod(const char permissao_str[4], const char arquivo[]) {
-  const mode_t permissao = strtol(permissao_str, 0, 8);
+void executa_chmod(char permissao_str[4], char arquivo[]) {
+  mode_t permissao;
+  permissao = strtol(permissao_str, 0, 8);
   chmod(arquivo, permissao);
+}
+
+void executa_main_thread(char executavel[]){
+  int pid, stat;
+  pid = fork();
+  if(pid != 0) { /* pai */
+    waitpid(pid, &stat, 0);
+    printf("\n PROCESSO RETORNOU COM STATUS %d", stat);
+  }
+  else { /* filho */  
+     execve(executavel, NULL, NULL); /* passamos um arquivo binário sem argumentos */
+  }
 }
