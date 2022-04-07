@@ -7,6 +7,12 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+#define PROTEGE 1
+#define LIBERA 2
+#define RODE 3
+#define RODEVEJA 4
+#define COMANDO_INEXISTENTE 5
+
 int traduz_comando(char comando[]);
 void executa_comando(int comando, char argumento[]);
 void executa_chmod(char permissao_str[4], char arquivo[]);
@@ -34,15 +40,15 @@ int main(int argc, char **argv) {
  */
 int traduz_comando(char comando[]) {
   if (strcmp(comando, "protegepracaramba") == 0)
-    return 1;
+    return PROTEGE;
   else if (strcmp(comando, "liberageral") == 0)
-    return 2;
+    return LIBERA;
   else if (strcmp(comando, "rodeveja") == 0)
-    return 3;
+    return RODEVEJA;
   else if (strcmp(comando, "rode") == 0)
-    return 4;
+    return RODE;
   else
-    return 5;
+    return COMANDO_INEXISTENTE;
 }
 
 /**
@@ -50,13 +56,13 @@ int traduz_comando(char comando[]) {
  */
 void executa_comando(int comando, char argumento[]) {
   switch (comando) {
-  case 1:
+  case PROTEGE:
     executa_chmod("000", argumento);
     break;
-  case 2:
+  case LIBERA:
     executa_chmod("777", argumento);
     break;
-  case 3:
+  case RODE:
     executa_main_thread(argumento);
     break;
   default:
