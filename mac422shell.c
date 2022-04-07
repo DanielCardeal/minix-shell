@@ -76,7 +76,7 @@ void executa_comando(int comando, char argumento[]) {
     executa_e_sai(argumento);
     break;
   default:
-    printf("ERRO: COMANDO NÃO IMPLEMENTADO AINDA!!!\n");
+    printf("ERRO: COMANDO INVÁLIDO\n");
     break;
   }
 }
