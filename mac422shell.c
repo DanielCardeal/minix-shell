@@ -16,7 +16,7 @@
 int traduz_comando(char comando[]);
 void executa_comando(int comando, char argumento[]);
 void executa_chmod(char permissao_str[4], char arquivo[]);
-void executa_main_thread(char executavel[]);
+void executa_e_espera(char executavel[]);
 
 int main(int argc, char **argv) {
   char input_cmd[64], input_arg[64];
@@ -62,8 +62,8 @@ void executa_comando(int comando, char argumento[]) {
   case LIBERA:
     executa_chmod("777", argumento);
     break;
-  case RODE:
-    executa_main_thread(argumento);
+  case RODEVEJA:
+    executa_e_espera(argumento);
     break;
   default:
     printf("ERRO: COMANDO NÃO IMPLEMENTADO AINDA!!!\n");
@@ -81,14 +81,17 @@ void executa_chmod(char permissao_str[4], char arquivo[]) {
   chmod(arquivo, permissao);
 }
 
-void executa_main_thread(char executavel[]){
+/**
+ * Executa o arquivo apontado por `executável` sincronamente. Escreve na tela o
+ * status de saída do programa.
+ */
+void executa_e_espera(char executavel[]) {
   int pid, stat;
   pid = fork();
-  if(pid != 0) { /* pai */
+  if (pid != 0) {
     waitpid(pid, &stat, 0);
-    printf("\n PROCESSO RETORNOU COM STATUS %d", stat);
-  }
-  else { /* filho */  
-     execve(executavel, NULL, NULL); /* passamos um arquivo binário sem argumentos */
+    printf("\nPROCESSO RETORNOU COM STATUS %d\n", stat);
+  } else {
+    execve(executavel, NULL, NULL);
   }
 }
