@@ -1,8 +1,9 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -O2
+ISO_FILES = mac422shell.c simple.c br-abnt2.map
 
-mac422shell: mac422shell.c
-	$(CC) -o $@ $< $(CFLAGS)
+all: ep.iso
+
+ep.iso: $(ISO_FILES)
+	mkisofs -o $@ $^
 
 clean:
-	rm -f mac422shell
+	rm -f ep.iso
