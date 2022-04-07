@@ -4,8 +4,8 @@
 
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <unistd.h>
 #include <sys/wait.h>
+#include <unistd.h>
 
 #define PROTEGE 1
 #define LIBERA 2
