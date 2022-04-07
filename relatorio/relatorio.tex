@@ -1,0 +1,53 @@
+\documentclass[12pt, twoside, a4paper]{article}
+
+% --- Formatação doc ---
+\usepackage[top = 2.5cm, bottom = 2cm, left = 2.5cm, right = 2.5cm]{geometry}
+\usepackage{lmodern}  % fonte ABNT
+\usepackage[T1]{fontenc}
+\usepackage[portuguese]{babel}
+\usepackage{gensymb}
+
+% --- Utils ---
+\usepackage{amsmath} % | matemática
+\usepackage{amssymb} % |
+\usepackage{graphicx}
+\usepackage[shortlabels]{enumitem} % | configura enumerate
+
+\usepackage{tabularx} % | Tabelas melhores
+\usepackage{booktabs} % |
+
+\usepackage{hyperref} % | Links clicáveis
+
+\usepackage{xcolor} % | Texto colorido
+
+% Anota TODOs no texto
+\newcommand{\todo}[1]{{\color{red} TODO: #1}}
+
+% Remove numero das seções
+\makeatletter
+\renewcommand{\@seccntformat}[1]{}
+\makeatother
+
+% Ajeita o espaçamento para equivalente ao 1.5
+\linespread{1.5}
+
+% --- Começo do documento ---
+\begin{document}
+
+\section{Explicação geral}%
+
+\todo{}
+
+\section{Item a}%
+\todo{}
+
+\section{Item b}%
+\todo{}
+
+\section{Item c}%
+\todo{}
+
+\section{Item d}%
+\todo{}
+
+\end{document}
