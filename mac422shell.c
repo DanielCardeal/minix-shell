@@ -1,3 +1,9 @@
+/*
+** EP1 - MAC422
+** ------------
+** Nome: Daniel Pessoa Cardeal, NUSP: 10693170
+** Nome: Caio Danta Simão Ugeda, NUSP: 11796868
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
