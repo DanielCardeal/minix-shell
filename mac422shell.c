@@ -17,6 +17,7 @@ int traduz_comando(char comando[]);
 void executa_comando(int comando, char argumento[]);
 void executa_chmod(char permissao_str[4], char arquivo[]);
 void executa_e_espera(char executavel[]);
+void executa_e_sai(char executavel[]);
 
 int main(int argc, char **argv) {
   char input_cmd[64], input_arg[64];
@@ -65,6 +66,9 @@ void executa_comando(int comando, char argumento[]) {
   case RODEVEJA:
     executa_e_espera(argumento);
     break;
+  case RODE:
+    executa_e_sai(argumento);
+    break;
   default:
     printf("ERRO: COMANDO NÃO IMPLEMENTADO AINDA!!!\n");
     break;
@@ -92,6 +96,18 @@ void executa_e_espera(char executavel[]) {
     waitpid(pid, &stat, 0);
     printf("\nPROCESSO RETORNOU COM STATUS %d\n", stat);
   } else {
+    execve(executavel, NULL, NULL);
+  }
+}
+
+/**
+ * Executa o arquivo apontado por `executável` assincronamente.
+ */
+void executa_e_sai(char executavel[]) {
+  int pid, stat;
+  pid = fork();
+  if (pid == 0) {
+    close(0);
     execve(executavel, NULL, NULL);
   }
 }
