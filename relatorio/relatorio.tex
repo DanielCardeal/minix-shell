@@ -63,9 +63,16 @@ Sabendo disso, a execução do comando ``protegepracaramba'' consiste simplesmen
 O comando ``liberageral'' é idêntico em funcionalidade ao comando visto no item anterior, e só difere quanto à \textit{string} de permissão passada a função \verb|executa_chmod|. Neste segundo caso, passamos a \emph{string} ``777'', ou seja, todas as operações são permitidas para todos os usuários.
 
 \section{Item c}%
-\todo{}
+O comando ``rodeveja'' recebe como único argumento o \emph{path} para o arquivo binário a ser executado. Esse arquivo será executado de maneira a interromper a entrada da shell, portanto não será possível executar novas intruções.
+
+Para que seja possível rodar o arquivo binário passado como parâmetro é necessário que o nosso processo realize uma chamada de sistema \verb|fork|, assim criando um novo processo filho a partir do exato instante em que foi chamado. E então o filho deve rodar o arquivo binário, para sabermos que estamos no filho é necessário conferir o retorno da chamada \verb|fork| (caso 0 estamos no filho, caso diferente de 0 então temos o PID do processo filho). 
+
+A partir do momento que podemos distinguir se estamos no processo pai e processo filho, podemos definir comportamentos diferente para cada cenário. O processo filho irá fazer uma chamada de sistema \verb|execve| recebendo o caminho para o arquivo binário a ser executado. Já o processo pai irá realizar a chamada de sistema \verb|waitpid| que receberá como argumento o PID do processo filho (obtido no \verb|fork|) e também o endereço de memória onde será armazenado o status de retorno do processo filho.
+
+Com isso, podemos garantir que o processo filho irá executar o arquivo binário passado e o processo pai irá esperar o retorno do processo filho para seguir em frente, com isso não é possível realizar novas intruções enquanto o binário passado está sendo executado pelo filho.
 
 \section{Item d}%
-\todo{}
+
+De maneira similar ao comando anterior, o comando ``RODE'' também receberá como argumento o \emph{path} para um arquivo binário, porém existe uma diferença em relação ao comportamento dos processos após a chamada de sistema \verb|fork|, no comando atual, o processo pai não irá esperar o processo filho ser executado e nem irá ser responsável pelo código de retorno do processo. Já no processo filho a diferença é que antes da execução de qualquer comando, o processo filho irá fechar a sua entrada padrão com a chamada de sistema \verb|close| passando como argumento o \textit{int} 0, responsável pela entrada padrão, com isso o processo pai monopoliza o teclado e com isso não existe a possibilidade de interferência no processo filho enquanto o processo pai continuar sua execução, devido a isso é possível executar intruções para a shell enquanto algum binário será executado no processo filho (assim como o anterior, com a chamada de sistema \verb|execeve|)
 
 \end{document}
