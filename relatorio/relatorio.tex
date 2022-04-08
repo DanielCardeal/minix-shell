@@ -39,10 +39,16 @@
 A aplicação desenvolvida para este trabalho realiza a entrada de comandos e argumentos por meio de um \textit{loop} infinito e chamadas à função \verb|scanf|. Após a leitura, os comandos são mapeado a um \textbf{código de comando} (representado por um inteiro), o que simplifica a leitura do programa bem como previne a comparação extensiva de \emph{strings}. O código obtido é então passado para a função \verb|executa_comando|, que fica responsável por executar a rotina adequada com o argumento recebido.
 
 \section{Item a}%
-\todo{}
+
+A lógica de mudança de permissão usando chamadas de sistema pode ser encontrada na função \verb|executa_chmod|. Essa recebe como parâmetros uma \emph{string} de formatação semelhante à usada em sistemas Linux (``755'', por exemplo), assim como o caminho (relativo ou absoluto) para o arquivo que deve ser modificado.
+
+A \emph{string} de formatação é apenas um facilitador, e deve ser traduzida para um valor \textit{long} antes de ser passada para a chamada de sistema \verb|chmod|. Essa conversão é feita usando a função \verb|strtol| (\textit{string-to-long}) e a base octal, já que as permissões são dadas em triplas de valores entre 0 e 7.
+
+Sabendo disso, a execução do comando ``protegepracaramba'' consiste simplesmente na chamada da função \verb|executa_chmod| com a permissão ``000'' (ou seja, nenhuma operação permitida) e o caminho recebido pelo usuário.
 
 \section{Item b}%
-\todo{}
+
+O comando ``liberageral'' é idêntico em funcionalidade ao comando visto no item anterior, e só difere quanto à \textit{string} de permissão passada a função \verb|executa_chmod|. Neste segundo caso, passamos a \emph{string} ``777'', ou seja, todas as operações são permitidas para todos os usuários.
 
 \section{Item c}%
 \todo{}
